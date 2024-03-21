@@ -12,6 +12,7 @@ else:
 numSys = int(input("What number system do you want to convert this number in?: "))
 digits = []
 digitDict = list("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
 if number!=0:
 	remainder = number%numSys
 	n = 0
@@ -30,12 +31,12 @@ else:
 	numOut = '0'
 periodLen = len(period)
 nOPR = ''
-if period == '':
+power = int(input("Please, enter your fractional precision: "))
+if period == '' or power<1:
 	nOPR = '0'
 elif period!='0' and numSys<=36:
 	i = 0
 	nOPR = ''
-	power = int(input("Please, enter your fractional precision: "))
 	while i<=power:
 		periodRaw = str(int(period)*numSys)[:-periodLen:]
 		if periodRaw!='':
@@ -48,7 +49,6 @@ elif period!='0' and numSys<=36:
 elif period!='' and numSys>36:
 	i = 0
 	nOPR = ''
-	power = int(input("Please, enter your fractional precision: "))
 	while i<=power:
 		periodRaw = str(int(period)*numSys)[:-periodLen:]
 		if periodRaw!='':
