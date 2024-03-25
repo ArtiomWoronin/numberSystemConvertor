@@ -110,9 +110,4 @@ elif period!='' and numSys>36:
 				break
 		numOutPeriodRaw = ''.join(numOutPeriodRaw)
 
-if len(numOut+numOutPeriodRaw)<5000:
-	print(numOut+numOutPeriodRaw)
-else:
-	wToBiNu = open(r'/home/artyom/Desktop/wayTooBigNumber.txt', 'w+')
-	wToBiNu.write(numOut+numOutPeriodRaw)
-	wToBiNu.close()
+print(numOut+numOutPeriodRaw)
