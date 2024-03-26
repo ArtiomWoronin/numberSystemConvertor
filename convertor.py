@@ -7,6 +7,8 @@ def factors(x):
 	factorList+=[x//2,x]
 	return factorList
 
+
+
 if '.' in numRaw and numRaw[0]!='.':
 	numRaw = numRaw.split('.')
 	number = int(numRaw[0])
@@ -18,10 +20,13 @@ else:
 	number = int(numRaw)
 	period = ''
 numSys = int(input("What number system do you want to convert this number in?(must be integer): "))
+
+
+
 if numSys==1 and period == '':
 	print('1'*number, '\nAre you good now?')
 	quit()
-elif (numSys<1 or numSys==1) and period == '':
+elif (numSys!=int or numSys==1) and period == '':
 	print("Wrong value!")
 	quit()
 
@@ -29,6 +34,8 @@ factorList = factors(numSys)
 
 digits = []
 digitDict = list("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+
 
 if number!=0:
 	remainder = number%numSys
@@ -47,11 +54,14 @@ if number!=0:
 else:
 	numOut = '0'
 
+
+
 if period !='':
 	numOutPeriodRaw = ''
 	periodLen = len(period)
 	power = input("Please, enter your fractional precision: ")
 	roundFlag = input("Round? Y/n ").lower()
+
 	if ('max' in power) and numSys<10:
 		power = len(period)*len(period)+1
 	elif ('max' in power) and numSys>=10:
@@ -61,6 +71,8 @@ if period !='':
 			power = len(period)*len(period)+1
 	else:
 		power = int(power)
+
+
 
 if period == '' or power<1:
 	numOutPeriodRaw = ''
@@ -77,16 +89,7 @@ elif period!='0' and numSys<=36:
 		period = str(int(period)*numSys)[-periodLen::]
 		i+=1
 	numOutPeriodRaw = '.'+numOutPeriodRaw
-	if 'y' in roundFlag and not (2 in factorList and 5 in factorList):
-		numOutPeriodRaw = list(numOutPeriodRaw)
-		for i in range(-len(numOutPeriodRaw),0,-1):
-			if int(numOutPeriodRaw[i])<numSys//2:
-				numOutPeriodRaw[i].replace('')
-			if int(numOutPeriodRaw[i])>=numSys//2:
-				numOutPeriodRaw[i].replace('')
-				numOutPeriodRaw[i-1].replace(digitDict[digitDict.index(numOutPeriodRaw[i-1])+1])
-				break
-		numOutPeriodRaw = ''.join(numOutPeriodRaw)
+
 elif period!='' and numSys>36:
 	i = 0
 	numOutPeriodRaw = ''
@@ -99,15 +102,37 @@ elif period!='' and numSys>36:
 		period = str(int(period)*numSys)[-periodLen::]
 		i+=1
 	numOutPeriodRaw = '.'+numOutPeriodRaw
-	if 'y' in roundFlag and not (2 in factorList and 5 in factorList):
-		numOutPeriodRaw = list(numOutPeriodRaw)
-		for i in range(-len(numOutPeriodRaw),0,-1):
-			if int(numOutPeriodRaw[i])<numSys//2:
-				numOutPeriodRaw[i].replace('')
-			if int(numOutPeriodRaw[i])>=numSys//2:
-				numOutPeriodRaw[i].replace('')
-				numOutPeriodRaw[i-1].replace(str(int(numOutPeriodRaw[i-1])+1))
-				break
-		numOutPeriodRaw = ''.join(numOutPeriodRaw)
 
-print(numOut+numOutPeriodRaw)
+if 'y' in roundFlag:
+	numOutPeriodRaw = list(numOutPeriodRaw)
+	if numSys%2==0:
+		numHalf = numSys//2
+	else:
+		numHalf = numSys//2 + 1
+	if numSys<=36:
+		for i in range(len(numOutPeriodRaw)-1,1,-1):
+			if digitDict.index(numOutPeriodRaw[i])>=numHalf:
+				numOutPeriodRaw[i-1] = digitDict[digitDict.index(numOutPeriodRaw[i-1])+1]
+				numOutPeriodRaw[i] = ''
+				print(numOut+''.join(numOutPeriodRaw))
+				quit()
+			else:
+				numOutPeriodRaw[i] = ''
+	else:
+		for i in range(len(numOutPeriodRaw)-1,1,-1):
+			if int(numOutPeriodRaw[i].replace('(','').replace(')',''))>=numHalf:
+				numOutPeriodRaw[i-1] = str(int(numOutPeriodRaw[i-1].replace('(','').replace(')','')) + 1)
+				numOutPeriodRaw[i] = ''
+				print(numOut+''.join(numOutPeriodRaw))
+				quit()
+			else:
+				numOutPeriodRaw[i] = ''
+
+
+
+if len(numOut+numOutPeriodRaw)<5000:
+	print(numOut+numOutPeriodRaw)
+else:
+	wToBiNu = open(r'/home/artyom/Desktop/wayTooBigNumber.txt', 'w+')
+	wToBiNu.write(numOut+numOutPeriodRaw)
+	wToBiNu.close()
